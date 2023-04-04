@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class ActionAdviser {
 
     private boolean isFirewallActive;
@@ -11,6 +14,15 @@ public class ActionAdviser {
     }
 
     public void AnalyzeStatus(){
-
+        List<Commands> advices = new ArrayList<>();
+        if(!isFirewallActive){
+            advices.add(Commands.ENABLE_FIREWALL);
+        }
+        if(areThereOpenPorts){
+            advices.add(Commands.DENY_INCOMING_CONNECTIONS);
+        }
+        if(areThereUntrustedConnections){
+            advices.add(Commands.DENY_INCOMING_CONNECTIONS);
+        }
     }
 }

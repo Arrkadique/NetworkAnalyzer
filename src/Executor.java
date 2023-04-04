@@ -50,6 +50,7 @@ public class Executor {
 
     public static void checkNetworkStatus() throws IOException {
         NetworkAnalyzer networkAnalyzer = new NetworkAnalyzer();
+        ActionAdviser actionAdviser;
 
         System.out.println("\nStart checking firewall status...");
         networkAnalyzer.checkIsActive(getCommandOutput(Commands.GET_STATUS.getCommand()));
@@ -59,6 +60,12 @@ public class Executor {
 
         System.out.println("Start checking network connections...");
         networkAnalyzer.checkNetworkConnections(getCommandOutput(Commands.GET_ALL_CONNECTIONS.getCommand()));
+
+
+        System.out.println("Prepare actions to make your network safety...");
+        actionAdviser = new ActionAdviser(networkAnalyzer.isFirewallActive(),
+                networkAnalyzer.isAreThereOpenPorts(), networkAnalyzer.isAreThereUntrustedConnections());
+        actionAdviser.AnalyzeStatus();
 
     }
 
