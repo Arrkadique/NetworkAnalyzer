@@ -1,6 +1,6 @@
 
 //it's enum with commands, that we can use in executor. this enum makes code scalable
-//for example, we can add one more command and we shouldn't change different classes
+//for example, we can add one more command and we shouldn't change different class
 
 public enum Commands {
     GET_INFO(1,"ufw version"),
@@ -9,7 +9,7 @@ public enum Commands {
     DISABLE_FIREWALL(4, "ufw disable"),
     RESET_FIREWALL(5, "ufw reset"),
     GET_OPEN_PORTS(6, "netstat -ntlp | grep LISTEN"),
-    GET_ALL_CONNECTIONS(7, "sudo nmap -sn -PU 192.168.0.0/24");
+    GET_ALL_CONNECTIONS(7, "sudo nmap -sn -PU 192.198.0.0/24");
 
 
     private final int commandId;

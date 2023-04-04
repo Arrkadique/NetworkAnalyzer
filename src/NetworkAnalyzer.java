@@ -1,6 +1,11 @@
 
 //this class will get info about network status
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class NetworkAnalyzer {
 
     private boolean isFirewallActive;
@@ -9,8 +14,9 @@ public class NetworkAnalyzer {
 
 
     public void checkIsActive(String commandOutput){
-        System.out.println("Start checking firewall status...");
-        isFirewallActive = commandOutput.equals("Status: active");
+        String[] result = commandOutput.split("\n", 2);
+
+        isFirewallActive = result[0].equals("Status: active");
         if(isFirewallActive){
             System.out.println(commandOutput);
         } else {
@@ -18,16 +24,28 @@ public class NetworkAnalyzer {
         }
     }
 
-    public void checkOpenPorts(String commandOutput, boolean areThereOpenPorts){
-        System.out.println("\nStart checking open ports...");
-        this.areThereOpenPorts = areThereOpenPorts;
+    public void checkOpenPorts(String commandOutput){
+        this.areThereOpenPorts = true;
         System.out.println(commandOutput);
     }
 
     public void checkNetworkConnections(String commandOutput){
-        System.out.println("Start checking network connections...");
-        this.areThereUntrustedConnections = true;
-        System.out.println(commandOutput);
+
+        Pattern pattern = Pattern.compile("[(](.*?)[)]");
+        Matcher matcher = pattern.matcher(commandOutput);
+        List<String> lst = new ArrayList<>();
+        while (matcher.find()) {
+            lst.add(matcher.group(1));
+        }
+
+        if(lst.get(1).equals("0 hosts up")){
+            this.areThereUntrustedConnections = false;
+            System.out.println("0 hosts up");
+        } else{
+            this.areThereUntrustedConnections = true;
+            System.out.println(commandOutput);
+        }
+
     }
 
     public void makingActions(){

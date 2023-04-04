@@ -60,43 +60,28 @@ public class Executor {
 
     public static void checkNetworkStatus() throws IOException {
         NetworkAnalyzer networkAnalyzer = new NetworkAnalyzer();
-        Process process;
-        BufferedReader reader;
-        StringBuilder output;
 
-        process = Runtime.getRuntime().exec(
-                Commands.GET_STATUS.getCommand(), null);
-        reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream()));
-        networkAnalyzer.checkIsActive(reader.readLine());
+        System.out.println("Start checking firewall status...");
+        networkAnalyzer.checkIsActive(getCommandOutput(Commands.GET_STATUS.getCommand()));
 
-        process = Runtime.getRuntime().exec(
-                Commands.GET_OPEN_PORTS.getCommand(), null);
-        reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream()));
-        output = new StringBuilder();
-        String line = reader.readLine();
-        if(line.equals("Active Internet connections (only servers)")){
-            output.append(line);
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n");
-            }
-            networkAnalyzer.checkOpenPorts(output.toString(),true);
-        } else {
-            networkAnalyzer.checkOpenPorts("There aren't open ports (max safe)",
-                    false);
-        }
+        System.out.println("\nStart checking open ports...");
+        networkAnalyzer.checkOpenPorts(getCommandOutput(Commands.GET_OPEN_PORTS.getCommand()));
 
-        process = Runtime.getRuntime().exec(
-                Commands.GET_ALL_CONNECTIONS.getCommand(), null);
-        reader = new BufferedReader(
+        System.out.println("Start checking network connections...");
+        networkAnalyzer.checkNetworkConnections(getCommandOutput(Commands.GET_ALL_CONNECTIONS.getCommand()));
+
+    }
+
+    public static String getCommandOutput(String command) throws IOException {
+        Process process = Runtime.getRuntime().exec(
+                command, null);
+        StringBuilder output = new StringBuilder();
+        BufferedReader reader = new BufferedReader(
                 new InputStreamReader(process.getInputStream()));
-        output = new StringBuilder();
+        String line;
         while ((line = reader.readLine()) != null) {
             output.append(line).append("\n");
         }
-        networkAnalyzer.checkNetworkConnections(output.toString());
-
-
+        return String.valueOf(output);
     }
 }
