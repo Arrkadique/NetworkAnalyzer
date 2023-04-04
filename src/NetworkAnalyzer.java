@@ -12,6 +12,17 @@ public class NetworkAnalyzer {
     private boolean areThereOpenPorts;
     private boolean areThereUntrustedConnections;
 
+    public boolean isFirewallActive() {
+        return isFirewallActive;
+    }
+
+    public boolean isAreThereOpenPorts() {
+        return areThereOpenPorts;
+    }
+
+    public boolean isAreThereUntrustedConnections() {
+        return areThereUntrustedConnections;
+    }
 
     public void checkIsActive(String commandOutput){
         String[] result = commandOutput.split("\n", 2);
@@ -20,7 +31,7 @@ public class NetworkAnalyzer {
         if(isFirewallActive){
             System.out.println(commandOutput);
         } else {
-            System.out.println("Firewall is inactive");
+            System.out.println("Firewall is inactive\n");
         }
     }
 
