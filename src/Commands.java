@@ -9,7 +9,7 @@ public enum Commands {
     DISABLE_FIREWALL(4, "ufw disable", "Disable firewall"),
     RESET_FIREWALL(5, "ufw reset", "Reset firewall settings"),
     GET_OPEN_PORTS(6, "netstat -ntlp | grep LISTEN", "Show open ports"),
-    GET_ALL_CONNECTIONS(7, "sudo nmap -sn -PU 192.198.0.0/24",
+    GET_ALL_CONNECTIONS(7, "sudo nmap -sn -PU 192.198.1.0/24",
             "Check all connections in your network"),
     DENY_INCOMING_CONNECTIONS(8, "ufw default deny incoming",
             "Close incoming connections");

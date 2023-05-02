@@ -49,17 +49,14 @@ public class NetworkAnalyzer {
             lst.add(matcher.group(1));
         }
 
-        if(lst.get(1).equals("0 hosts up")){
-            this.areThereUntrustedConnections = false;
-            System.out.println("0 hosts up");
-        } else{
-            this.areThereUntrustedConnections = true;
-            System.out.println(commandOutput);
+        if(!lst.isEmpty()){
+            if(lst.get(1).equals("0 hosts up")){
+                this.areThereUntrustedConnections = false;
+                System.out.println("0 hosts up");
+            } else{
+                this.areThereUntrustedConnections = true;
+                System.out.println(commandOutput);
+            }
         }
-
-    }
-
-    public void makingActions(){
-
     }
 }

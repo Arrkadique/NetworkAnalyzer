@@ -10,45 +10,23 @@ public class Executor {
 
         String command;
         Scanner in = new Scanner(System.in);
+        NetworkAnalyzer networkAnalyzer = new NetworkAnalyzer();
 
-        checkNetworkStatus();
-
-        System.out.println();
-        for (Commands a: Commands.values()) {
-            System.out.println(a.getCommandId() + ". " + a.getDescription());
-        }
-        System.out.println("Choose option: ");
-
-        command = Commands.getById(Integer.parseInt(in.nextLine()));
-
-        Process process = Runtime.getRuntime().exec(
-                command, null);
-        StringBuilder output = new StringBuilder();
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream()));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            output.append(line).append("\n");
-        }
-        int exitVal = process.waitFor();
-        if (exitVal == 0) {
-            System.out.println("Success!");
-            System.out.println(output);
-        } else {
-            StringBuilder errorOutput = new StringBuilder();
-
-            BufferedReader errorReader = new BufferedReader(
-                    new InputStreamReader(process.getErrorStream()));
-
-            String errorLine;
-            while ((errorLine = errorReader.readLine()) != null) {
-                errorOutput.append(errorLine).append("\n");
+        command = checkNetworkStatus();
+        if(command.equals("0")){
+            System.out.println();
+            for (Commands a: Commands.values()) {
+                System.out.println(a.getCommandId() + ". " + a.getDescription());
             }
-            System.out.println(errorOutput);
+            System.out.println("Choose option: ");
+            command = in.nextLine();
         }
+        command = Commands.getById(Integer.parseInt(command));
+
+        System.out.println(getCommandOutput(command));
     }
 
-    public static void checkNetworkStatus() throws IOException {
+    public static String checkNetworkStatus() throws IOException {
         NetworkAnalyzer networkAnalyzer = new NetworkAnalyzer();
         ActionAdviser actionAdviser;
 
@@ -67,6 +45,7 @@ public class Executor {
                 networkAnalyzer.isAreThereOpenPorts(), networkAnalyzer.isAreThereUntrustedConnections());
         actionAdviser.AnalyzeStatus();
 
+        return actionAdviser.showAdvices();
     }
 
     public static String getCommandOutput(String command) throws IOException {
